@@ -1,2 +1,2 @@
-# RembGANdt
+# RemGANdt
 ArtGAN for generating paintings.
