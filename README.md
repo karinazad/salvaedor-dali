@@ -1,2 +1,2 @@
-# GAN-casso
+# RemGANdt
 ArtGAN for generating paintings.
