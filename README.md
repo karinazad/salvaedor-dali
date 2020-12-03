@@ -1,3 +1,3 @@
 # RemGANdt
-# MichelGANcelo
+# MicheGANcelo
 ArtGAN for generating paintings.
