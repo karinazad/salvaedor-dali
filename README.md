@@ -1,3 +1,3 @@
 # RemGANdt
 # MicheGANcelo
-ArtGAN for generating paintings.
+Generate classical paintings with generative adversarial network
