@@ -1,7 +1,10 @@
+### models.py ###
+
 import tensorflow as tf
-from keras.layers import Input, Dense, Reshape, Flatten, ReLU, LeakyReLU, BatchNormalization
+from keras.layers import Input, Dense, Reshape, Flatten, ReLU, LeakyReLU, BatchNormalization, Conv2DTranspose, Dropout
 from keras.layers.convolutional import UpSampling2D, Conv2D
 from settings import *
+
 
 
 class ResBlock(tf.keras.layers.Layer):
@@ -61,17 +64,17 @@ class Discriminator(tf.keras.Model):
         self.model = tf.keras.models.Sequential()
         self.model.add(Input(shape=(IMG_SIZE, IMG_SIZE, 3)))
 
-        self.model.add(Conv2D(64, kernel_size=4, strides=(2,2), padding="same", use_bias=False))
+        self.model.add(Conv2D(64, kernel_size=4, strides=(2, 2), padding="same", use_bias=False))
         self.model.add(LeakyReLU())
-        self.model.add(Conv2D(128, kernel_size=4, strides=2, padding="same", use_bias=False))
+        self.model.add(Conv2D(128, kernel_size=4, strides=(2, 2), padding="same", use_bias=False))
         self.model.add(LeakyReLU())
-        self.model.add(Conv2D(256, kernel_size=4, strides=2, padding="same", use_bias=False))
-        self.model.add(Conv2D(256, kernel_size=4, strides=2, padding="same", use_bias=False))
+        self.model.add(Conv2D(256, kernel_size=4, strides=(2, 2), padding="same", use_bias=False))
+        self.model.add(Conv2D(256, kernel_size=4, strides=(2, 2), padding="same", use_bias=False))
         self.model.add(LeakyReLU())
-        self.model.add(Conv2D(512, kernel_size=4, strides=2, padding="same", use_bias=False))
+        self.model.add(Conv2D(512, kernel_size=4, strides=(2, 2), padding="same", use_bias=False))
         self.model.add(LeakyReLU())
 
-        self.model.add(Conv2D(1, kernel_size=3, strides=1, padding="same",  use_bias=False))
+        self.model.add(Conv2D(1, kernel_size=3, strides=1, padding="same", use_bias=False))
 
         self.model.add(Flatten())
         self.model.add(Dense(units=1, activation=None))
@@ -79,3 +82,5 @@ class Discriminator(tf.keras.Model):
     def call(self, x):
         x = self.model(x)
         return x
+
+
