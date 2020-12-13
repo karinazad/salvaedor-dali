@@ -1,5 +1,8 @@
 # VAEcent Gan Gogh
 Generate classical paintings using Variational Autoencoders and WGAN-GP.
 
-![Alt text](https://github.com/karinazad/VAEcent-GAN-Gogh/blob/main/images/resized/Albrecht_Du╠êrer_232.jpg)
+![Alt text](https://github.com/karinazad/VAEcent-GAN-Gogh/blob/main/images/resized/Alfred_Sisley_30.jpg)
+![Alt text](https://github.com/karinazad/VAEcent-GAN-Gogh/blob/main/images/resized/Alfred_Sisley_31.jpg)
+![Alt text](https://github.com/karinazad/VAEcent-GAN-Gogh/blob/main/images/resized/Alfred_Sisley_33.jpg)
+
 
