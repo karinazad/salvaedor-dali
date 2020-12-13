@@ -15,3 +15,4 @@ def plot_images(generator, seed=None):
 
     # plt.savefig('image_at_epoch_{:04d}.png'.format(epoch))
     plt.show()
+

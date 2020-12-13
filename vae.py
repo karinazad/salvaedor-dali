@@ -34,4 +34,4 @@ class VAE(tf.keras.Model):
         grads = tape.gradient(loss, self.trainable_weights)
         self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
 
-        return loss, reconstr_error, kl_loss
+        return { "loss": loss, "reconstruction_loss": reconstr_error, "kl_loss": kl_loss}
