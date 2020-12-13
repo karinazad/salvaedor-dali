@@ -2,8 +2,8 @@ import numpy as np
 import tensorflow as tf
 
 class VAE():
-    def __init__(self, latent_dimensions = 10):
-        self.latent_dim = latent_dimensions
+    def __init__(self, ):
+        self.latent_dim = LATENT_DIM
 
 
                  # latent_dimensions=10,
