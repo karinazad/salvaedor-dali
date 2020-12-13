@@ -50,7 +50,7 @@ class Decoder(tf.keras.Model):
         self.conv1 = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")
         self.conv2 = layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same")
         self.conv3 = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")
-        
+
 
     def call(self, x):
         x = self.input(x)
