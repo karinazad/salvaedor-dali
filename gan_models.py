@@ -3,8 +3,9 @@
 import tensorflow as tf
 from keras.layers import Input, Dense, Reshape, Flatten, ReLU, LeakyReLU, BatchNormalization, Conv2DTranspose, Dropout
 from keras.layers.convolutional import UpSampling2D, Conv2D
+from keras import layers
+from keras.models import Sequential
 from settings import *
-
 
 
 class ResBlock(tf.keras.layers.Layer):
@@ -84,3 +85,63 @@ class Discriminator(tf.keras.Model):
         return x
 
 
+#### Option 2 ####
+
+
+class Generator2(tf.keras.Model):
+    def __init__(self):
+        """
+        Implementation of the Discriminator.
+        """
+        super(Generator2, self).__init__(name='discriminator')
+
+        self.model = Sequential()
+        self.model.add(layers.Dense(128 * 4 * 4, activation='relu', input_shape=Z.shape))
+        self.model.add(layers.Reshape((4, 4, 128)))
+        self.model.add(layers.UpSampling2D())
+        self.model.add(layers.Conv2D(128, kernel_size=4, padding='same'))
+        self.model.add(layers.BatchNormalization(momentum=0.8))
+        self.model.add(layers.Activation('relu'))
+        self.model.add(layers.UpSampling2D())
+        self.model.add(layers.Conv2D(64, kernel_size=4, padding='same'))
+        self.model.add(layers.BatchNormalization(momentum=0.8))
+        self.model.add(layers.Activation('relu'))
+        self.model.add(layers.UpSampling2D())
+        self.model.add(layers.Conv2D(3, kernel_size=4, padding='same', activation='tanh'))
+        return self.model
+
+    def call(self, x):
+        x = self.model(x)
+        return x
+
+
+class Discriminator2(tf.keras.Model):
+    def __init__(self):
+        """
+        Implementation of the Discriminator.
+        """
+        super(Discriminator2, self).__init__(name='discriminator')
+
+        self.model = Sequential()
+        self.model.add(layers.Conv2D(16, kernel_size=2, padding='same', activation='relu',
+                                     input_shape=(NOISE_SHAPE,)))
+        self.model.add(layers.Dropout(0.25))
+        self.model.add(layers.Conv2D(32, kernel_size=3, strides=2, padding='same'))
+        self.model.add(layers.BatchNormalization())
+        self.model.add(layers.Activation('relu'))
+        self.model.add(layers.Dropout(0.25))
+        self.model.add(layers.Conv2D(64, kernel_size=3, strides=2, padding='same'))
+        self.model.add(layers.BatchNormalization())
+        self.model.add(layers.Activation('relu'))
+        self.model.add(layers.Dropout(0.25))
+        self.model.add(layers.Conv2D(128, kernel_size=3, strides=2, padding='same'))
+        self.model.add(layers.BatchNormalization())
+        self.model.add(layers.Activation('relu'))
+        self.model.add(layers.Dropout(0.25))
+        self.model.add(layers.Flatten())
+        self.model.add(layers.Dense(1))
+        return self.model
+
+    def call(self, x):
+        x = self.model(x)
+        return x

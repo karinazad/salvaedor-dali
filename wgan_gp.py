@@ -1,18 +1,36 @@
 import tensorflow as tf
-from models import Generator, Discriminator
+import matplotlib.pyplot as plt
+from gan_models import Generator, Discriminator
 from settings import *
+from utils.plot import plot_images
 
+class WGAN_GP:
+    def __init__(self, generator=None, discriminator=None, g_optimizer=None, d_optimizer=None,
+                 gradient_penalty=100):
 
-class GAN():
-    def __init__(self):
-        self.G = Generator()
-        self.D = Discriminator()
+        if generator is None:
+            self.G = Generator()
+        else:
+            self.G = generator
 
-        self.G_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-4, beta_1=0.5, beta_2=0.9)
-        self.D_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-4, beta_1=0.5, beta_2=0.9)
+        if discriminator is None:
+            self.D = Discriminator()
+        else:
+            self.D = discriminator
 
+        if g_optimizer is None:
+            self.G_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-4, beta_1=0.5, beta_2=0.9)
+        else:
+            self.G_optimizer = g_optimizer
+
+        if d_optimizer is None:
+            self.D_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-4, beta_1=0.5, beta_2=0.9)
+        else:
+            self.D_optimizer = d_optimizer
+
+        self.gp_weight = gradient_penalty
         self.batch_size = BATCH_SIZE
-        self.gp_weight = 10
+        self.seed = tf.random.normal([16, NOISE_SHAPE])
         self.history = {"G_loss": [], "D_loss": [], "gradient_penalty": []}
 
     def generator_loss(self, fake_score):
@@ -22,9 +40,10 @@ class GAN():
         return tf.reduce_mean(fake_score) - tf.reduce_mean(real_score)
 
     def gradient_penalty(self, real_samples, fake_samples):
-        alpha = tf.random.normal([self.batch_size, 1, 1], 0.0, 1.0)
+        alpha = tf.random.uniform([self.batch_size, 1, 1, 1], 0.0, 1.0)
         real_samples = tf.cast(real_samples, tf.float32)
         diff = fake_samples - real_samples
+
         interpolated = real_samples + alpha * diff
 
         with tf.GradientTape() as gp_tape:
@@ -32,7 +51,7 @@ class GAN():
             pred = self.D(interpolated, training=True)
 
         grads = gp_tape.gradient(pred, [interpolated])[0]
-        norm = tf.sqrt(tf.reduce_sum(tf.square(grads), axis=[1, 2]))
+        norm = tf.sqrt(tf.reduce_sum(tf.square(grads), axis=[1, 2, 3]))
         gp = tf.reduce_mean((norm - 1.0) ** 2)
 
         return gp
@@ -78,7 +97,22 @@ class GAN():
         dataset = dataset.shuffle(inputs.shape[0], seed=0).batch(self.batch_size, drop_remainder=True)
         return dataset
 
-    def train(self, inputs, epochs, step_log=50):
+    def plot_images(self):
+        z = tf.random.normal([16, 128])
+        predictions = self.G(z, training=False)
+        fig = plt.figure(figsize=(8, 8))
+
+        for i in range(predictions.shape[0]):
+            plt.subplot(4, 4, i + 1)
+            plt.imshow(predictions[i])
+
+        # plt.savefig('image_at_epoch_{:04d}.png'.format(epoch))
+        plt.show()
+
+    def train(self, inputs, epochs, step_log=10, show_images=True):
+
+        print('Start training....')
+        plot_images(self.G, seed=self.seed)
 
         for epoch in range(epochs):
             dataset = self.create_dataset(inputs)
@@ -89,12 +123,26 @@ class GAN():
                 G_loss = self.G_train_step()
                 D_loss, GP = self.D_train_step(sample_batch)
 
-                if step % step_log == 0:
-                    self.history["G_loss"].append(G_loss.numpy())
-                    self.history["D_loss"].append(D_loss.numpy())
-                    self.history['gradient_penalty'].append(GP.numpy())
+                if type(step_log) in (int, float):
+                    if step % step_log == 0:
+                        self.history["G_loss"].append(G_loss.numpy())
+                        self.history["D_loss"].append(D_loss.numpy())
+                        self.history['gradient_penalty'].append(GP.numpy())
 
-                    print(f'\t Step {step}/{len(dataset) // self.batch_size} \t Generator: {G_loss.numpy()}'
-                          f' \t Discriminator: {D_loss.numpy()}')
+                        print(f'\t Step {step}/{len(dataset) // self.batch_size}: \t Generator: {G_loss.numpy()}'
+                              f' \t Discriminator: {D_loss.numpy()}')
+
+                        if show_images:
+                            plot_images(self.G, seed=self.seed)
 
                 step += 1
+
+            if step_log == 'epoch':
+                self.history["G_loss"].append(G_loss.numpy())
+                self.history["D_loss"].append(D_loss.numpy())
+                self.history['gradient_penalty'].append(GP.numpy())
+
+                print(f'\t Step {step}/{len(dataset) // self.batch_size} \t Generator: {G_loss.numpy()}'
+                      f' \t Discriminator: {D_loss.numpy()}')
+                if show_images:
+                    plot_images(self.G, seed=self.seed)

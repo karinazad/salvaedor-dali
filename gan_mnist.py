@@ -91,7 +91,6 @@ class GAN_MNIST:
 
 
 
-
 class Generator_MNIST(tf.keras.Model):
     def __init__(self):
         """
