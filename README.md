@@ -1,2 +1,2 @@
 # VAEcent Gan Gogh
-Generate classical paintings with Variational Autoencoders and WGAN-GP.
+Generate classical paintings using Variational Autoencoders and WGAN-GP.
