@@ -1,2 +1,2 @@
-# MicheGANcelo
-Generate classical paintings with generative adversarial network.
+# VAEcent Gan Gogh
+Generate classical paintings using Variational Autoencoders and WGAN-GP.
