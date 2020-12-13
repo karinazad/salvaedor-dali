@@ -4,8 +4,6 @@ from settings import *
 
 
 class Sampling(layers.Layer):
-    """Uses (z_mean, z_log_var) to sample z, the vector encoding a digit."""
-
     def call(self, inputs):
         z_mean, z_log_var = inputs
         batch = tf.shape(z_mean)[0]
@@ -46,13 +44,12 @@ class Decoder(tf.keras.Model):
 
         self.model = tf.keras.Sequential()
         self.model.add(tf.keras.Input(shape = (LATENT_DIM,)))
-        self.model.add(layers.Dense(7 * 7 * 64, activation="relu"))
-        self.model.add(layers.Reshape((7, 7, 64)))
+        self.model.add(layers.Dense(DIM * DIM * 64, activation="relu"))
+        self.model.add(layers.Reshape((DIM, DIM, 64)))
         self.model.add(layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same"))
         self.model.add(layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same"))
-        self.model.add(layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same"))
+        self.model.add(layers.Conv2DTranspose(CHANNELS, 3, activation="sigmoid", padding="same"))
 
     def call(self, x):
         x = self.model(x)
         return x
-

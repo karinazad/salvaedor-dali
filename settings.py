@@ -1,10 +1,18 @@
 # Path to training dataset
-IMAGE_PATH = './images/resized'
+
+IMAGE_PATH = ""
 
 NOISE_SHAPE = 128
 BATCH_SIZE = 32
-IMG_SIZE = 28
-CHANNELS = 1
 
+IMG_SIZE = 64
 
-LATENT_DIM = 5
+if IMG_SIZE == 28:
+    DIM = 7
+elif IMG_SIZE == 64:
+    DIM = 16
+else:
+    raise Warning('Provide custom parameter for dimensions.')
+
+CHANNELS = 3
+LATENT_DIM = 2

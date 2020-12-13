@@ -49,6 +49,3 @@ def load_images(n_images=None, path=IMAGE_PATH, resize_shape=(64, 64), bw=False)
     return np.array(images)
 
 
-def preprocess_images(images):
-    images = images.reshape((images.shape[0], IMG_SIZE, IMG_SIZE, CHANNELS)) / 255.
-    return images.astype(float)

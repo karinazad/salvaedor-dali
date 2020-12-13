@@ -3,6 +3,7 @@ import tensorflow as tf
 from vae_models import Encoder, Decoder
 from settings import *
 
+
 class VAE(tf.keras.Model):
     def __init__(self, ):
         super(VAE, self).__init__()
