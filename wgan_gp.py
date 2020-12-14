@@ -1,8 +1,7 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
-from gan_models import Generator, Discriminator
+from wgan_models import Generator, Discriminator
 from settings import *
-from utils.plot import plot_images
 
 class WGAN_GP:
     def __init__(self, generator=None, discriminator=None, g_optimizer=None, d_optimizer=None,
@@ -112,8 +111,6 @@ class WGAN_GP:
     def train(self, inputs, epochs, step_log=10, show_images=True):
 
         print('Start training....')
-        plot_images(self.G, seed=self.seed)
-
         for epoch in range(epochs):
             dataset = self.create_dataset(inputs)
             print(f"Epoch {epoch}/{epochs}:")
