@@ -1,10 +1,7 @@
-from PIL import Image
-from IPython.display import clear_output
-import os
-import sys
-import numpy as np
+
 from settings import *
 
+import pandas as pd
 from PIL import Image
 from IPython.display import clear_output
 import os
@@ -49,3 +46,29 @@ def load_images(n_images=None, path=IMAGE_PATH, resize_shape=(64, 64), bw=False)
     return np.array(images)
 
 
+def create_labels_artist(path=None, genres=False):
+    if path is None:
+        path = os.path.join(IMAGE_PATH, 'resized')
+
+    files = os.listdir(path)
+    artists = pd.read_csv(os.path.join(IMAGE_PATH, 'artists.csv'))
+    artists_names = artists['name'].str.replace(' ', '_').values
+
+    tags = []
+    for i, file in enumerate(files):
+        try:
+            artist_index = int(np.where([artist in file for artist in artists_names])[0])
+            tag = artists_names[artist_index]
+            if genres:
+                tag = artists['genre'][artist_index]
+                if len(tag.split(',')) > 1:
+                    tag = tag.split(',')[0]
+        except:
+            if file.split('_')[0] == 'Albrecht':
+                tag = 'Albrecht_Durer'
+            else:
+                tag = ''
+
+        tags.append(tag)
+
+    return np.array(tags)

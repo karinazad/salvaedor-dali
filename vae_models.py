@@ -53,3 +53,52 @@ class Decoder(tf.keras.Model):
     def call(self, x):
         x = self.model(x)
         return x
+
+
+#### ARCH2
+
+class Encoder2(tf.keras.Model):
+    def __init__(self):
+        super(Encoder, self).__init__()
+
+        self.model = tf.keras.Sequential()
+        self.model.add(tf.keras.Input(shape = (IMG_SIZE, IMG_SIZE, CHANNELS)))
+        self.model.add(layers.Conv2D(filters=32, kernel_size=4, strides=2, activation=tf.nn.relu, padding='same'))
+        self.model.add(layers.Conv2D(filters=64, kernel_size=4, strides=2, activation=tf.nn.relu, padding='same'))
+        self.model.add(layers.Conv2D(filters=128, kernel_size=4, strides=2, activation=tf.nn.relu, padding='same'))
+        self.model.add(layers.Conv2D(filters=264, kernel_size=4, strides=2, activation=tf.nn.relu, padding='same'))
+        self.model.add(layers.Flatten())
+        self.model.add(layers.Dense(16, activation = 'relu'))
+
+        self.dense_z = layers.Dense(LATENT_DIM, name="z_mean")
+        self.log_var_z =  layers.Dense(LATENT_DIM, name="z_log_var")
+
+
+    def call(self, x):
+        x = self.model(x)
+
+        z_mean = self.dense_z(x)
+        z_log_var = self.log_var_z(x)
+        z = Sampling()([z_mean, z_log_var])
+
+        return [z_mean, z_log_var, z]
+
+
+class Decoder2(tf.keras.Model):
+    def __init__(self):
+        super(Decoder, self).__init__()
+
+        self.model = tf.keras.Sequential()
+        self.model.add(tf.keras.Input(shape = (LATENT_DIM,)))
+        self.model.add(layers.Dense(4 * 4 * 264, activation="relu"))
+        self.model.add(layers.Reshape((4, 4, 264)))
+        self.model.add(layers.Conv2DTranspose(264, 3, activation="relu", strides=2, padding="same"))
+        self.model.add(layers.Conv2DTranspose(128, 3, activation="relu", strides=2, padding="same"))
+        self.model.add(layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same"))
+        self.model.add(layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same"))
+        self.model.add(layers.Conv2DTranspose(CHANNELS, 3, activation="sigmoid", padding="same"))
+
+    def call(self, x):
+        x = self.model(x)
+        return x
+

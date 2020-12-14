@@ -1,0 +1,22 @@
+Impressionism             1647
+Post-Impressionism        1048
+Symbolism                  666
+Albrecht_Durer             656
+High Renaissance           556
+Baroque                    495
+Expressionism              469
+Cubism                     439
+Surrealism                 435
+Primitivism                429
+Romanticism                388
+Northern Renaissance       352
+Pop Art                    181
+Early Renaissance          164
+Realism                    149
+Suprematism                126
+Proto Renaissance          119
+Byzantine Art               99
+Mannerism                   87
+Neoplasticism               84
+Social Realism              70
+Abstract Expressionism      24
