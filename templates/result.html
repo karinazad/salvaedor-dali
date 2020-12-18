@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block content %}
+    Your picked {{type}} is {{artist}}.
+<div>
+    <img src="{{ url_for('static', filename=image)}}" alt="User Image">
+</div>
+{% endblock content %}

@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for post in posts%}
+    <h1> {{post.artist}}</h1>
+    <p> Style: {{post.genre}}</p>
+    {% endfor %}
+{% endblock content %}

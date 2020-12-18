@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Create new paintings!</h1>
+    <h3>Please choose the name of your favorite artist...</h3>
+
+      <form method="POST" >
+
+        <select id="artist" name="artist">
+          <option value="Vincent Van Gogh">Vincent Van Gogh</option>
+          <option value="Salvador Dali">Salvador Dali</option>
+          <option value="Rembrandt">Rembrandt</option>
+        </select>
+
+            <input type="submit">
+
+      </form>
+
+    <h3>... or choose your favorite style</h3>
+
+
+    <form method="POST" >
+
+        <select id="genre" name="genre">
+          <option value="G-Impressionism">Impressionism</option>
+          <option value="G-Classicism">Classicism</option>
+          <option value="G-Surrealism">Surrealism</option>
+        </select>
+
+            <input type="submit">
+
+      </form>
+
+<!--        <form method="POST">-->
+<!--            <input name="text">-->
+<!--            <input type="submit">-->
+<!--        </form>-->
+
+{% endblock content %}
