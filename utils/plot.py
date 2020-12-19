@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from settings import *
 
 
-def plot_real_images(images, save_name=None):
+def plot_real_images(images, save_name=False):
     fig, axes = plt.subplots(4, 4, figsize=(12, 12))
     axes = axes.ravel()
 
@@ -17,9 +17,9 @@ def plot_real_images(images, save_name=None):
         plt.savefig(os.path.join(IMAGE_PATH, 'examples_real', save_name))
 
 
-def plot_generated_images(decoder, samples=5, scale=10, save_name=None):
+def plot_generated_images(decoder, samples=4, scale=1, save_name=False):
     n = samples * samples
-    scale = scale
+    digit_size = IMG_SIZE
 
     grid_x = np.linspace(-scale, scale, n)
     grid_y = np.linspace(-scale, scale, n)[::-1]
@@ -30,21 +30,48 @@ def plot_generated_images(decoder, samples=5, scale=10, save_name=None):
     for i, yi in enumerate(grid_y):
         for j, xi in enumerate(grid_x):
             z_sample = np.array([[xi, yi]])
+            if LATENT_DIM > 2:
+                z_sample = np.random.normal(size=(LATENT_DIM,)).reshape(1, -1)
             x_decoded = decoder.predict(z_sample)
             image = x_decoded[0]
             axes[i].imshow(image)
             axes[i].axis('off')
+
     plt.show()
 
     if save_name:
         plt.savefig(os.path.join(IMAGE_PATH, 'examples_generated', save_name))
 
-def plot_latent(decoder):
-    # Adapted from Keras
-    n = 30
+
+def plot_decoded(encoder, decoder, selected, title=None):
+    cols = len(selected)
+    fig, axes = plt.subplots(2, cols, figsize=(2 * cols, 4))
+    axes = axes.ravel()
+    encoded,_,_ = encoder(selected)
+    decoded = decoder(encoded)
+
+    for i in range(cols):
+        axes[i].imshow(selected[i])
+        axes[i + cols].imshow(decoded[i])
+        axes[i].set_xticks([])
+        axes[i].set_yticks([])
+        axes[i+cols].set_xticks([])
+        axes[i+cols].set_yticks([])
+
+        if i == 0:
+            axes[i].set_ylabel('Real Images')
+            axes[i + cols].set_ylabel('Reconstruction')
+
+    if title:
+        plt.title(title)
+
+    plt.show()
+
+
+def plot_latent(decoder, samples=10, scale=1):
     digit_size = IMG_SIZE
-    scale = 1
-    figsize = 20
+    figsize = 12
+    n = samples
     figure = np.zeros((digit_size * n, digit_size * n, 3))
 
     grid_x = np.linspace(-scale, scale, n)
@@ -53,12 +80,14 @@ def plot_latent(decoder):
     for i, yi in enumerate(grid_y):
         for j, xi in enumerate(grid_x):
             z_sample = np.array([[xi, yi]])
+            if LATENT_DIM > 2:
+                z_sample = np.random.normal(size=(LATENT_DIM,)).reshape(1, -1)
             x_decoded = decoder.predict(z_sample)
             digit = x_decoded[0].reshape(digit_size, digit_size, 3)
             figure[
-                i * digit_size : (i + 1) * digit_size,
-                j * digit_size : (j + 1) * digit_size,
-                :] = digit
+            i * digit_size: (i + 1) * digit_size,
+            j * digit_size: (j + 1) * digit_size,
+            :] = digit
 
     plt.figure(figsize=(figsize, figsize))
     start_range = digit_size // 2
@@ -75,7 +104,6 @@ def plot_latent(decoder):
 
 
 def plot_label_clusters(encoder, data, labels=None):
-    # Adapted from Keras
     z_mean, _, _ = encoder.predict(data)
     plt.figure(figsize=(12, 10))
     plt.scatter(z_mean[:, 0], z_mean[:, 1], c=labels)

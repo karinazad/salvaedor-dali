@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from vae_models import Encoder, Decoder
+from models.vae_models import Encoder, Decoder
 from settings import *
 
 

@@ -1,12 +1,11 @@
-# Path to training dataset
-IMAGE_PATH = "/content/drive/MyDrive/Colab Notebooks/MicheGANgelo/images/"
+import os
 
-ENCODER_PATH = "/content/drive/MyDrive/Colab Notebooks/MicheGANgelo/models/encoder_lat5_arch3"
-DECODER_PATH = "/content/drive/MyDrive/Colab Notebooks/MicheGANgelo/models/decoder_lat5_arch3"
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+IMAGE_PATH = os.path.join(ROOT_DIR, 'data')
+
 
 NOISE_SHAPE = 128
-BATCH_SIZE = 32
-
+BATCH_SIZE = 128
 IMG_SIZE = 64
 
 DIM = None
