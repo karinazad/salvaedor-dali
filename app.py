@@ -1,7 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask import send_file
+import numpy as np
 import os
+import sys
 
+from run_vae import run_vae, save_generated_images
+from utils.image_processing import preprocess_images
+from settings import *
 
 app = Flask(__name__)
 app.static_folder = 'static'
@@ -31,7 +36,7 @@ def result():
 
 @app.route('/about')
 def about():
-    return render_template('about.html', posts=posts, title='About')
+    return render_template('about.html', posts=artists, title='About')
 
 
 @app.route('/error')
@@ -51,6 +56,54 @@ def show_result():
             picked = value
 
     image_src = "general_2.png"
+
+    images = np.load(os.path.join(ROOT_DIR, 'data/processed/64x64/images.npy'))
+    artists, genres = np.load(os.path.join(ROOT_DIR, 'data/processed/64x64/labels.npy'))
+
+    images, order = preprocess_images(images, shuffle=True)
+    artists, genres = artists[order], genres[order]
+
+    print('Please type in the name of a painter (e.g.: Salvador Dali, Vincent van Gogh etc.)')
+    artist_or_genre = input()
+    artist_or_genre = artist_or_genre.replace(' ', '_')
+
+    if artist_or_genre:
+        if artist_or_genre in np.unique(artists):
+            artist = artist_or_genre
+            genre = None
+            print(f'Your selected artist is {artist}.')
+            inputs = images[artists == artist]
+
+        elif artist_or_genre in np.unique(genres):
+            genre = artist_or_genre
+            artist = None
+            print(f'Your selected genre is {genre}.')
+            inputs = images[genres == genre]
+
+        else:
+            print(f'Sorry, this option is not available yet.')
+            sys.exit()
+
+    print(f'Number of images: {len(inputs)}.')
+
+    vae = run_vae(images[:50], artist_or_genre)
+
+    if artist:
+        save_generated_images(vae, inputs, artist = artist)
+    elif genre:
+        save_generated_images(vae, inputs, genre=genre)
+    else:
+        save_generated_images(vae, inputs)
+
+
+
+
+
+
+
+
+
+
 
     return render_template('result.html', data=None, artist=picked, type=type, image=image_src)
 

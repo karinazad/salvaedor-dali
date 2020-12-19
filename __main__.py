@@ -1,4 +1,5 @@
 import os
+import sys
 import numpy as np
 import keras
 
@@ -57,7 +58,7 @@ def save_generated_images(vae, inputs, artist = None, genre = None):
     for i in range(len(inputs) // 8):
         if i == 0:
             plot_real_images(inputs[:16], save_path=os.path.join(SAVE_PATH, f'{artist}_real'))
-            plot_decoded(vae.encoder, vae.decoder, inputs[6 * i:6 * (i + 1)],
+        plot_decoded(vae.encoder, vae.decoder, inputs[6 * i:6 * (i + 1)],
                          save_path=os.path.join(SAVE_PATH, f'{artist}_{i}'))
 
 
@@ -68,7 +69,9 @@ if __name__ == '__main__':
     images, order = preprocess_images(images, shuffle=True)
     artists, genres = artists[order], genres[order]
 
+    print('Please type in the name of a painter (e.g.: Salvador Dali, Vincent van Gogh etc.)')
     artist_or_genre = input()
+    artist_or_genre = artist_or_genre.replace(' ', '_')
 
     if artist_or_genre:
         if artist_or_genre in np.unique(artists):
@@ -85,10 +88,7 @@ if __name__ == '__main__':
 
         else:
             print(f'Sorry, this option is not available yet.')
-            inputs = images
-            artist_or_genre = ''
-            artist = None
-            genre = None
+            sys.exit()
 
     print(f'Number of images: {len(inputs)}.')
 
