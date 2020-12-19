@@ -13,4 +13,6 @@ And there are over 50 artists, such as Vincent van Gogh, Edgar Degas, Albrecht D
 Examples of reconstructed paintings are shown below.
 ![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_generated/compare/general_2.png)
 ![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_generated/compare/general_1.png)
+![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_generated/compare/02.png)
+![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_generated/compare/04.png)
 
