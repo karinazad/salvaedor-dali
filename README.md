@@ -10,9 +10,10 @@ And there are over 50 artists, such as Vincent van Gogh, Edgar Degas, Albrecht D
 
 
 ## Reconstruction by VAE
-Examples of reconstructed paintings are shown below.
+Examples of reconstructed paintings.
 ![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_generated/compare/01.png)
 ![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_generated/compare/02.png)
 ![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_generated/compare/03.png)
 ![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_generated/compare/04.png)
 
+## Latent space exploration
