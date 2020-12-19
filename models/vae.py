@@ -5,19 +5,19 @@ from settings import *
 
 
 class VAE(tf.keras.Model):
-    def __init__(self, encoder_path = None, decoder_path = None):
+    def __init__(self, encoder_path = None, decoder_path = None, latent_dim = LATENT_DIM):
         super(VAE, self).__init__()
         self.latent_dim = LATENT_DIM
 
         if encoder_path:
             self.encoder = tf.keras.models.load_model(encoder_path)
         else:
-            self.encoder = Encoder()
+            self.encoder = Encoder(latent_dim = latent_dim)
 
         if decoder_path:
             self.decoder = tf.keras.models.load_model(decoder_path)
         else:
-            self.decoder = Decoder()
+            self.decoder = Decoder(latent_dim = latent_dim)
 
     def loss_fn(self, real, reconstr):
         loss = tf.keras.losses.binary_crossentropy(real, reconstr)

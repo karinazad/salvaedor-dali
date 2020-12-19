@@ -49,10 +49,7 @@ def _create_handles(dctn):
 
 
 
-def plot_umap(data, labels):
-    n_neighbors = 200
-    min_dist = 0.2
-    n_components = 2
+def plot_umap(data, labels, n_neighbors = 50, min_dist = 0.2,n_components = 2 ):
     metric = 'euclidean'
 
     fit = umap.UMAP(n_neighbors=n_neighbors, min_dist=min_dist, n_components=n_components, metric=metric)

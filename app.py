@@ -2,15 +2,17 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask import send_file
 import os
 
+
 app = Flask(__name__)
 app.static_folder = 'static'
 
-posts = [{
+artists = [{
     'artist': 'Vincent van Gogh',
     'genre': 'Surrealism'
 },
     {'artist': 'Salvador Dali',
      'genre': 'Surrealism'}]
+
 
 IMAGES_FOLDER = os.path.join('static', 'images')
 app.config['UPLOAD_FOLDER'] = IMAGES_FOLDER

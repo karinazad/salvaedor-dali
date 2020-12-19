@@ -13,20 +13,19 @@ class Sampling(layers.Layer):
 
 
 class Encoder(tf.keras.Model):
-    def __init__(self):
+    def __init__(self, latent_dim=LATENT_DIM):
         super(Encoder, self).__init__()
 
         self.model = tf.keras.Sequential()
-        self.model.add(tf.keras.Input(shape = (IMG_SIZE, IMG_SIZE, CHANNELS)))
+        self.model.add(tf.keras.Input(shape=(IMG_SIZE, IMG_SIZE, CHANNELS)))
         self.model.add(layers.Conv2D(filters=128, kernel_size=4, strides=2, activation=tf.nn.relu, padding='same'))
         self.model.add(layers.Conv2D(filters=128, kernel_size=4, strides=2, activation=tf.nn.relu, padding='same'))
         self.model.add(layers.Conv2D(filters=512, kernel_size=4, strides=2, activation=tf.nn.relu, padding='same'))
         self.model.add(layers.Flatten())
-        self.model.add(layers.Dense(16, activation = 'relu'))
+        self.model.add(layers.Dense(16, activation='relu'))
 
-        self.dense_z = layers.Dense(LATENT_DIM, name="z_mean")
-        self.log_var_z =  layers.Dense(LATENT_DIM, name="z_log_var")
-
+        self.dense_z = layers.Dense(latent_dim, name="z_mean")
+        self.log_var_z = layers.Dense(latent_dim, name="z_log_var")
 
     def call(self, x):
         x = self.model(x)
@@ -39,11 +38,11 @@ class Encoder(tf.keras.Model):
 
 
 class Decoder(tf.keras.Model):
-    def __init__(self):
+    def __init__(self, latent_dim = LATENT_DIM):
         super(Decoder, self).__init__()
 
         self.model = tf.keras.Sequential()
-        self.model.add(tf.keras.Input(shape = (LATENT_DIM,)))
+        self.model.add(tf.keras.Input(shape=(latent_dim,)))
         self.model.add(layers.Dense(DIM * DIM * 64, activation="relu"))
         self.model.add(layers.Reshape((DIM, DIM, 64)))
         self.model.add(layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same"))
@@ -53,4 +52,3 @@ class Decoder(tf.keras.Model):
     def call(self, x):
         x = self.model(x)
         return x
-

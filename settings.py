@@ -1,7 +1,14 @@
 import os
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-IMAGE_PATH = os.path.join(ROOT_DIR, 'data')
+try:
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+except:
+    ROOT_DIR = ''
+
+try:
+    IMAGE_PATH = os.path.join(ROOT_DIR, 'data')
+except:
+    IMAGE_PATH = ''
 
 
 NOISE_SHAPE = 128

@@ -4,10 +4,10 @@ import os
 import sys
 import numpy as np
 import pandas as pd
-
 from settings import *
 
-def load_images(n_images=None, path=IMAGE_PATH, resize_shape=(64, 64), bw=False):
+
+def load_images(n_images=None, root_path=None, resize_shape=(64, 64), bw=False):
     """
     Returns an array of pixels for each file in the directory that it in the RGB format.
     :param path: (str) path to where the training images are stored
@@ -18,54 +18,63 @@ def load_images(n_images=None, path=IMAGE_PATH, resize_shape=(64, 64), bw=False)
     images: (ndarray) array of pixels of shape (N, resize_shape[0], resize_shape[1])
 
     """
-    images = []
-    path = os.path.join(path, 'resized')
-    files = os.listdir(path)
+
+    if root_path is None:
+        try:
+            root_path = ROOT_DIR
+        except:
+            root_path = os.path.dirname(os.path.abspath(__file__))
+
+    images_path = os.path.join(root_path, 'resized')
+    info = pd.read_csv(os.path.join(ROOT_DIR, 'data/labels/artists.csv'))
+
+    files = os.listdir(images_path)
+
     if n_images and n_images < len(files):
         files = files[:n_images]
 
-    for i, file in enumerate(files):
-        img = Image.open(os.path.join(path, file)).resize(resize_shape)
+    data = {'images': [], 'artist': [], 'genre': []}
+
+    for i, filename in enumerate(files):
+        img = Image.open(os.path.join(images_path, filename)).resize(resize_shape)
         img = np.array(img)
+
         if img.ndim == 3:
             if bw:
-                images.append(img[:, :, 0])
+                data['images'].append(img[:, :, 0])
             else:
-                images.append(img)
+                data['images'].append(img)
+
+            artist_, genre_ = find_artist_genre(filename, info)
+            data['artist'].append(artist_)
+            data['genre'].append(genre_)
 
         print('Loading images: ', end=' ')
         sys.stdout.write(f"{i + 1}/{len(files)}")
         sys.stdout.flush()
         clear_output(wait=True)
 
-    return np.array(images)
+    images = np.array(data['images'])
+    artist = np.array(data['artist'])
+    genre = np.array(data['genre'])
+
+    return images, artist, genre
 
 
-def create_labels_artist(path=None, genres=False):
-    if path is None:
-        path = os.path.join(IMAGE_PATH, 'resized')
+def find_artist_genre(filename, df):
+    artists_names = df['name'].str.replace(' ', '_').values
 
-    files = os.listdir(path)
-    artists = pd.read_csv(os.path.join(IMAGE_PATH, 'artists.csv'))
-    artists_names = artists['name'].str.replace(' ', '_').values
+    try:
+        artist_index = int(np.where([artist in filename for artist in artists_names])[0])
+        artist = artists_names[artist_index]
+        genre = df['genre'][artist_index]
 
-    tags = []
-    for i, file in enumerate(files):
-        try:
-            artist_index = int(np.where([artist in file for artist in artists_names])[0])
-            tag = artists_names[artist_index]
-            if genres:
-                tag = artists['genre'][artist_index]
-                if len(tag.split(',')) > 1:
-                    tag = tag.split(',')[0]
-        except:
-            if file.split('_')[0] == 'Albrecht':
-                tag = 'Albrecht_Durer'
-            else:
-                tag = ''
+    except:
+        if filename.split('_')[0] == 'Albrecht':
+            artist = 'Albrecht_Durer'
+            genre = 'Northern Renaissance'
+        else:
+            artist = ''
+            genre = ''
 
-        tags.append(tag)
-
-    return np.array(tags)
-
-
+    return artist, genre

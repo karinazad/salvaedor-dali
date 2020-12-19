@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from settings import *
 
 
-def plot_real_images(images, save_name=False):
+def plot_real_images(images, save_path=False):
     fig, axes = plt.subplots(4, 4, figsize=(12, 12))
     axes = axes.ravel()
 
@@ -13,11 +13,11 @@ def plot_real_images(images, save_name=False):
         ax.axis('off')
     plt.show()
 
-    if save_name:
-        plt.savefig(os.path.join(IMAGE_PATH, 'examples_real', save_name))
+    if save_path:
+        plt.savefig(save_path)
 
 
-def plot_generated_images(decoder, samples=4, scale=1, save_name=False):
+def plot_generated_images(decoder, samples=4, scale=1, save_path=None):
     n = samples * samples
     digit_size = IMG_SIZE
 
@@ -39,11 +39,11 @@ def plot_generated_images(decoder, samples=4, scale=1, save_name=False):
 
     plt.show()
 
-    if save_name:
-        plt.savefig(os.path.join(IMAGE_PATH, 'examples_generated', save_name))
+    if save_path:
+        plt.savefig(save_path)
 
 
-def plot_decoded(encoder, decoder, selected, title=None):
+def plot_decoded(encoder, decoder, selected, title=None, save_path = None):
     cols = len(selected)
     fig, axes = plt.subplots(2, cols, figsize=(2 * cols, 4))
     axes = axes.ravel()
@@ -65,10 +65,13 @@ def plot_decoded(encoder, decoder, selected, title=None):
     if title:
         plt.title(title)
 
+    if save_path:
+        plt.savefig(save_path)
+
     plt.show()
 
 
-def plot_latent(decoder, samples=10, scale=1):
+def plot_latent(decoder, samples=10, latent_dim = LATENT_DIM, scale=1, save_path = None):
     digit_size = IMG_SIZE
     figsize = 12
     n = samples
@@ -81,7 +84,7 @@ def plot_latent(decoder, samples=10, scale=1):
         for j, xi in enumerate(grid_x):
             z_sample = np.array([[xi, yi]])
             if LATENT_DIM > 2:
-                z_sample = np.random.normal(size=(LATENT_DIM,)).reshape(1, -1)
+                z_sample = np.random.normal(size=(latent_dim,)).reshape(1, -1) * 2 * scale - scale
             x_decoded = decoder.predict(z_sample)
             digit = x_decoded[0].reshape(digit_size, digit_size, 3)
             figure[
@@ -102,8 +105,11 @@ def plot_latent(decoder, samples=10, scale=1):
     plt.imshow(figure)
     plt.show()
 
+    if save_path:
+        plt.savefig(save_path)
 
-def plot_label_clusters(encoder, data, labels=None):
+
+def plot_label_clusters(encoder, data, labels=None, save_path = None):
     z_mean, _, _ = encoder.predict(data)
     plt.figure(figsize=(12, 10))
     plt.scatter(z_mean[:, 0], z_mean[:, 1], c=labels)
@@ -112,6 +118,8 @@ def plot_label_clusters(encoder, data, labels=None):
     plt.ylabel("z[1]")
     plt.show()
 
+    if save_path:
+        plt.savefig(save_path)
 
 def plot_history_vae(model):
     total_loss = model.history.history['loss']

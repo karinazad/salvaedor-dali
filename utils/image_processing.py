@@ -8,9 +8,10 @@ def preprocess_images(images, shuffle=False):
     if shuffle:
         order = np.random.permutation(len(images))
         images = images[order]
-        return images, order
+    else:
+        order = np.arange(len(images))
 
-    return images
+    return images, order
 
 
 def pick_genre(genre, shuffle=True, images=None, genres=None):
