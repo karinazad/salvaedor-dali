@@ -3,6 +3,30 @@ Reproduce classical paintings using Variational Autoencoders (VAEs).
 
 ![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/examples_real/surrealism.png)
 
+## Install and run
+Clone this repository.
+```
+git clone https://github.com/karinazad/salvaedor-dali.git
+
+```
+To install requirements:
+
+```
+pip install -r requirements.txt
+
+```
+
+Run 
+
+```
+python run_vae.py
+
+```
+The following prompt will appear:
+```
+Please type in the name of a painter (e.g.: Salvador Dali, Vincent van Gogh etc.)
+```
+
 ## Variational Autoencoders
 VAE is an autoencoder whose encodings distribution is regularised during the training in order to ensure that its latent space has good properties allowing us to generate some new data.
 
