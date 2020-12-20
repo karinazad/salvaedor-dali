@@ -8,7 +8,8 @@ VAE is an autoencoder whose encodings distribution is regularised during the tra
 
 Variational Autoencoders (VAEs) learn to encode regularized distributions during training and restore or genereate new data during inference. Regularization ensures thtat the latent space has good properties. The model is able to reconstruct images (see Reconstruction by VAE) by passing into the encoder and the decoder but generate new data as well. This is done by passing random or uniform samples from latent space through the decoder (see Latent Space Exploration).
 
-[!alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/info.png)
+[!alt text](https://lilianweng.github.io/lil-log/assets/images/vae-gaussian.png)
+
 Image source: https://lilianweng.github.io/lil-log/2018/08/12/from-autoencoder-to-beta-vae.html 
 
 ## Dataset
