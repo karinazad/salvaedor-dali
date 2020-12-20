@@ -13,8 +13,7 @@ app.static_folder = 'static'
 
 artists = [{
     'artist': 'Vincent van Gogh',
-    'genre': 'Surrealism'
-},
+    'genre': 'Surrealism'},
     {'artist': 'Salvador Dali',
      'genre': 'Surrealism'}]
 
@@ -71,20 +70,20 @@ def show_result():
         if artist_or_genre in np.unique(artists):
             artist = artist_or_genre
             genre = None
-            print(f'Your selected artist is {artist}.')
+            print('Your selected artist is ' + artist)
             inputs = images[artists == artist]
 
         elif artist_or_genre in np.unique(genres):
             genre = artist_or_genre
             artist = None
-            print(f'Your selected genre is {genre}.')
+            print('Your selected genre is ' + genre)
             inputs = images[genres == genre]
 
         else:
-            print(f'Sorry, this option is not available yet.')
+            print('Sorry, this option is not available yet.')
             sys.exit()
 
-    print(f'Number of images: {len(inputs)}.')
+    print('Number of images: ' + len(inputs))
 
     vae = run_vae(images[:50], artist_or_genre)
 
@@ -94,15 +93,6 @@ def show_result():
         save_generated_images(vae, inputs, genre=genre)
     else:
         save_generated_images(vae, inputs)
-
-
-
-
-
-
-
-
-
 
 
     return render_template('result.html', data=None, artist=picked, type=type, image=image_src)

@@ -60,3 +60,43 @@ def save_generated_images(vae, inputs, artist = None, genre = None):
             plot_real_images(inputs[:16], save_path=os.path.join(SAVE_PATH, f'{artist}_real'))
         plot_decoded(vae.encoder, vae.decoder, inputs[6 * i:6 * (i + 1)],
                          save_path=os.path.join(SAVE_PATH, f'{artist}_{i}'))
+
+
+if __name__ == '__main__':
+    images = np.load(os.path.join(ROOT_DIR, 'data/processed/64x64/images.npy'))
+    artists, genres = np.load(os.path.join(ROOT_DIR, 'data/processed/64x64/labels.npy'))
+
+    images, order = preprocess_images(images, shuffle=True)
+    artists, genres = artists[order], genres[order]
+
+    print('Please type in the name of a painter (e.g.: Salvador Dali, Vincent van Gogh etc.)')
+    artist_or_genre = input()
+    artist_or_genre = artist_or_genre.replace(' ', '_')
+
+    if artist_or_genre:
+        if artist_or_genre in np.unique(artists):
+            artist = artist_or_genre
+            genre = None
+            print(f'Your selected artist is {artist}.')
+            inputs = images[artists == artist]
+
+        elif artist_or_genre in np.unique(genres):
+            genre = artist_or_genre
+            artist = None
+            print(f'Your selected genre is {genre}.')
+            inputs = images[genres == genre]
+
+        else:
+            print(f'Sorry, this option is not available yet.')
+            sys.exit()
+
+    print(f'Number of images: {len(inputs)}.')
+
+    vae = run_vae(images[:50], artist_or_genre)
+
+    if artist:
+        save_generated_images(vae, inputs, artist = artist)
+    elif genre:
+        save_generated_images(vae, inputs, genre=genre)
+    else:
+        save_generated_images(vae, inputs)
