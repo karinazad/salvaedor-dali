@@ -64,4 +64,4 @@ Examples of reconstructed paintings.
 ![alt text](https://raw.githubusercontent.com/karinazad/salvaedor-dali/main/generated/Salvador_Dali/Salvador_Dali_1.png)
 
 
-## Latent space exploration
+## Conditional Image Generation
