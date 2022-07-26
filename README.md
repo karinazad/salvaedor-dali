@@ -23,7 +23,7 @@ Please type in the name of a painter (e.g.: Salvador Dali, Vincent van Gogh etc.
 ```
 Type in the name of a painter. So far, the model supports: 
 
-Vincent Van Gogh, Andy Warhol, Claude Monet, Salvador Dali, Paul Gauguin, Pablo Picasso, and Frid Kahlo.
+Vincent Van Gogh, Andy Warhol, Claude Monet, Salvador Dali, Paul Gauguin, Pablo Picasso, and Fridа Kahlo.
 
 <!-- Albrecht Durer, Alfred Sisley, Amedeo Modigliani, Andrei Rublev, Andy Warhol, Camille Pissarro, Caravaggio, Claude Monet, Diego Rivera, Diego Velazquez, Edgar Degas, Edouard Manet, Edvard Munch, El Greco, Eugene Delacroix, Francisco Goya, Frida Kahlo, Georges Seurat, Giotto di Bondone, Gustav Klimt, Gustave Courbet, Henri Matisse, Henri Rousseau, Henri de Toulouse-Lautrec, Hieronymus Bosch, Jackson Pollock, Jan van Eyck, Joan Miro, Kazimir Malevich, Leonardo da Vinci, Marc Chagall, Michelangelo, Mikhail Vrubel, Pablo Picasso, Paul Cezanne, Paul Gauguin, Paul Klee, Peter Paul Rubens, Pierre-Auguste Renoir, Piet Mondrian, Pieter Bruegel, Raphael, Rembrandt, Rene Magritte, Salvador Dali, Sandro Botticelli, Titian, Vasiliy Kandinskiy, Vincent van Gogh, William Turner.
 
@@ -43,4 +43,4 @@ There are over 8500 images with the most common genres being Impressionism (1647
 And there are over 50 artists, such as Vincent van Gogh, Edgar Degas, Albrecht Durer, Pablo Picasso, and Salvador Dali.
 
 
-## Conditional Image Generation
+
